@@ -1,20 +1,29 @@
 func numbToStringExternal(_ a: String) -> String {
     
-    let dic09 = ["1": "один", "2": "два", "3": "три", "4": "четыре", "5": "пять", "6": "шесть", "7": "семь", "8": "восемь", "9": "девять", "0": "ноль"]
+    let dic09 = ["1": "один", "2": "два", "3": "три", "4": "четыре", "5": "пять", "6": "шесть", "7": "семь", "8": "восемь", "9": "девять"]
     let dic1019 = ["10": "десять", "11": "одиннадцать", "12": "двенадцать", "13": "тринадцать", "14": "четырнадцать", "15": "пятнадцать", "16": "шестнадцать", "17": "семнадцать", "18": "восемнадцать", "19": "девятнадцать"]
-    let dic2090 = ["20": "двадцать", "30": "тридцать", "40": "сорок", "50": "пятдесят", "60": "шестдесят", "70": "семьдесят", "80": "восемьдесят", "90": "девяноста"]
-    let dic100900 = ["100": "сто", "200": "двести", "300": "триста", "400": "четыреста", "500": "пятсот", "600": "шестьсот", "700": "семьсот", "800": "восемьсот", "900": "девятсот"]
-    var array = a.map { UInt(String($0))! }
-    var arrayForThousandWord = array
-    if arrayForThousandWord.count >= 4 {
-        arrayForThousandWord.removeLast(3)
-    }
+    let dic2090 = ["20": "двадцать", "30": "тридцать", "40": "сорок", "50": "пятьдесят", "60": "шестьдесят", "70": "семьдесят", "80": "восемьдесят", "90": "девяносто"]
+    let dic100900 = ["100": "сто", "200": "двести", "300": "триста", "400": "четыреста", "500": "пятьсот", "600": "шестьсот", "700": "семьсот", "800": "восемьсот", "900": "девятьсот"]
+    
+    var arrayToSeparate = a.map{ String($0) }
+    var separatedArray: [Int16] = []
+    repeat {
+        var a = ""
+        for _ in 1...3 {
+            if arrayToSeparate.count != 0 {
+                a.insert(contentsOf: arrayToSeparate[arrayToSeparate.count - 1], at: a.startIndex)
+                arrayToSeparate.removeLast()
+                
+            }
+        }
+        separatedArray.insert(Int16(a)!, at: 0)
+    } while arrayToSeparate.count != 0
  
-    let findNumb = { ( a: UInt, b: [String: String] ) -> String in
+    let findNumb = { ( a: Int16, b: [String: String] ) -> String in
         b[String(a)] ?? ""
     }
 
-    func switchFunc(_ a: UInt) -> (String, String, String) {
+    func switchFunc(_ a: Int16) -> (String, String, String) {
         var res = ("", "", "")
         switch a {
         case 1...9:
@@ -54,84 +63,72 @@ func numbToStringExternal(_ a: String) -> String {
         return res
     }
     
-    func thousand(_ a: [UInt]) -> UInt {
-        var intValue = UInt()
-        switch a.count {
-        case 3...:
-            intValue = UInt(String(a[array.count - 3]) + String(a[array.count - 2]) + String(a[array.count - 1]))!
-        case 2:
-            intValue = UInt(String(a[array.count - 2]) + String(a[array.count - 1]))!
+    func thousandWord(_ a: Int16) -> [String] {
+        var result = ["тысяч", "миллионов", "миллиардов", "триллионов", "квадриллионов", "квинтиллионов", "секстиллионов", "септиллионов", "октиллионов", "нониллионов", "дециллионов", "ундециллионов", "додециллионов", "тредециллионов", "кваттуордециллионов", "квиндециллионов", "седециллионов", "септдециллионов", "октодециллионов", "новемдециллионов", "вигинтиллионов", "анвигинтиллионов", "дуовигинтиллионов", "тревигинтиллионов", "кватторвигинтиллионов", "квинвигинтиллионов", "сексвигинтиллионов", "септемвигинтиллионов", "октовигинтиллионов", "новемвигинтиллионов", "тригинтиллионов", "антригинтиллионов", "дуотригинтиллионов", "квадрагинтиллионов", "квинквагинтиллионов", "сексагинтиллионов", "септуагинтиллионов", "октогинтиллионов", "нонагинтиллионов", "центиллионов", "анцентиллионов", "дуоцентиллионов", "трецентиллионов", "кватторцентиллионов", "децицентиллионов", "ундецицентиллионов", "вигинтицентиллионов", "третригинтацентиллионов", "дуцентиллионов", "трицентиллионов", "квадрингентиллионов", "квингентиллионов", "сесцентиллионов", "септингентиллионов", "октингентиллионов", "нонгентиллионов", "миллиллионов", "дуомилиаллионов", "тремиллиаллионов", "кваттормиллиаллионов", "квинквемилиаллионов", "дуцентдуомилианонгентновемдециллионов", "милиамилиаиллионов", "дуомилиамилиаиллионов"]
+        switch a % 100 {
         case 1:
-            intValue = UInt(String(a[array.count - 1]))!
-        default:
-            break
-        }
-        return intValue
-    }
-    
-    func thousandWord(_ a: [UInt]) -> (UInt, String, String, String) {
-        var intValue = UInt()
-        var stringValue = "тысяч"
-        var stringValue2 = "миллионов"
-        var stringValue3 = "миллиардов"
-        switch a.count {
-        case 3...:
-            intValue = UInt(String(a[arrayForThousandWord.count - 3]) + String(a[arrayForThousandWord.count - 2]) + String(a[arrayForThousandWord.count - 1]))!
-        case 2:
-            intValue = UInt(String(a[arrayForThousandWord.count - 2]) + String(a[arrayForThousandWord.count - 1]))!
-        case 1:
-            intValue = UInt(String(a[arrayForThousandWord.count - 1]))!
-        default:
-            break
-        }
-        switch intValue % 100 {
-        case 1:
-            stringValue += "а"
-            stringValue2 = "миллион"
-            stringValue3 = "миллиард"
+            result[0] += "а"
+            for i in 1..<result.count {
+                result[i].removeLast(2)
+            }
         case 2...4:
-            stringValue += "и"
-            stringValue2 = "миллиона"
-            stringValue3 = "миллиарда"
+            result[0] += "и"
+            for i in 1..<result.count {
+                result[i].removeLast(2)
+                result[i] += "а"
+            }
         case 20...99:
-            switch intValue % 100 % 10 {
+            switch a % 100 % 10 {
             case 1:
-                stringValue += "а"
-                stringValue2 = "миллион"
-                stringValue3 = "миллиард"
+                result[0] += "а"
+                for i in 1..<result.count {
+                    result[i].removeLast(2)
+                }
             case 2...4:
-                stringValue += "и"
-                stringValue2 = "миллиона"
-                stringValue3 = "миллиарда"
+                result[0] += "и"
+                for i in 1..<result.count {
+                    result[i].removeLast(2)
+                    result[i] += "а"
+                }
             default:
                 break
         }
         default:
             break
         }
-        return (intValue, stringValue, stringValue2, stringValue3)
+        return result
     }
-    
+    func insertValues() {
+        resultString.insert(switchFunc(separatedArray[separatedArray.count - 1]).2, at: 0)
+        resultString.insert(switchFunc(separatedArray[separatedArray.count - 1]).1, at: 0)
+        resultString.insert(switchFunc(separatedArray[separatedArray.count - 1]).0, at: 0)
+    }
     
     var resultString: [String] = []
     var result = ""
-    repeat {
-        resultString.insert(switchFunc(thousand(array)).2, at: 0)
-        resultString.insert(switchFunc(thousand(array)).1, at: 0)
-        resultString.insert(switchFunc(thousand(array)).0, at: 0)
-        if array.count <= 3 {
-            array.removeAll()
-        } else {
-            array.removeLast(3)
+    
+    insertValues()
+    separatedArray.removeLast()
+    
+    var k = 0
+    while separatedArray.count >= 1 {
+        insertValues()
+        switch resultString[0...2] {
+        case ["", "", ""]:
+            break
+        default:
+            resultString.insert(thousandWord(separatedArray[separatedArray.count - 1])[k], at: 3)
         }
-    } while array.count != 0
+        k += 1
+        separatedArray.removeLast()
+    }
 
     if resultString.count >= 4 {
-        switch resultString[resultString.count - 4] {
+        switch resultString[resultString.count - 5] {
         case "один":
-            resultString[resultString.count - 4] = "одна"
+            resultString[resultString.count - 5] = "одна"
         case "два":
-            resultString[resultString.count - 4] = "две"
+            resultString[resultString.count - 5] = "две"
         default:
             break
         }
